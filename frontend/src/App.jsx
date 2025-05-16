@@ -11,7 +11,14 @@ import LogoutPage from './pages/LogoutPage.jsx';
 import toast, { Toaster } from 'react-hot-toast';
 import { useQuery } from '@tanstack/react-query';
 import { axiosInstance } from './utils/axios.js';
+
+
+
+
 const App = () => {
+  // Fetching the auth user data
+  // using react-query
+  // using axiosInstance to make the request
   const { data: authData, isLoading, isError } = useQuery({
     queryKey: ['authUser'],
     queryFn: async () => {
@@ -20,7 +27,11 @@ const App = () => {
     },
     retry: false,
   });
+
   const authUser = authData?.user;
+
+
+
   return (
     <div data-theme="retro" className='h-screen' >
 

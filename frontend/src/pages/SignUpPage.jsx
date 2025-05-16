@@ -2,14 +2,24 @@ import React from 'react'
 import { useState } from 'react';
 import { ShipWheelIcon } from 'lucide-react';
 import { Link } from 'react-router';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { signup } from '../utils/apis.js';
 const SignUpPage = () => {
   const [signUpData, setSignUpData] = useState({
     username: '',
     email: '',
     password: '',
   });
+
+  const queryClient = useQueryClient();
+  const {mutate:signupMutation,isPending,error} = useMutation({
+    mutationFn: signup,
+    onSuccess: () => {
+      queryClient.invalidateQueries(['authUser']);
+    }});
   const handleSignUp = (e) => {
     e.preventDefault();
+    signupMutation(signUpData);
     console.log(signUpData);
   }
   return (
@@ -26,6 +36,10 @@ const SignUpPage = () => {
               Streamify
             </span>
           </div>
+
+          {error && <div className='text-red-500 text-sm'>
+            <span>{error?.response?.data?.message}</span></div>}
+
           <div className="w-full">
             <form onSubmit={handleSignUp}>
               <div className='space-y-4'>
@@ -76,7 +90,9 @@ const SignUpPage = () => {
                   </label>
                 </div>
                 <div className='form-control'>
-                  <button type="submit" className='btn btn-primary w-full'>Create Account</button>
+                  <button type="submit" className='btn btn-primary w-full'>
+                    {isPending ? <span className='loading loading-spinner loading-sm'> Loading....</span> : 'Sign Up'}
+                  </button>
                   <div className='text-center mt-4'>
                     <p className='text-sm'>Already have an account? {" "} <Link to="/login" className='text-primary hover:underline cursor-pointer'>Login</Link></p>
                   </div>
