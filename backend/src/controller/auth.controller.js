@@ -15,13 +15,15 @@ export const signup = async (req, res) => {
     if (!email || !password || !username) {
       return res.status(400).json({ message: 'All fields are required' });
     }
-    // Check if the user already exists
+ 
     const existingUser = await User.find({ email });
 
     if (existingUser.length < 0) {
       return res.status(400).json({ message: 'User already exists' });
     }
+
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
     if (!emailRegex.test(email)) {
       return res.status(400).json({ message: 'Invalid email format' });
     }
@@ -83,6 +85,7 @@ export const signup = async (req, res) => {
 export const login = async (req, res) => {
 
   try {
+    
     const { email, password } = req.body;
     console.log('Received data:', email, password);
     if (!email || !password) {

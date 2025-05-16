@@ -71,7 +71,7 @@ export const addFriend = async (req, res) => {
                 message: 'Friend request already sent',
             });
         }
-        const newFriendRequest = new FriendRequest.crete({
+        const newFriendRequest = new FriendRequest.create({
             senderId: userId,
             receiverId: friendId,
         });
