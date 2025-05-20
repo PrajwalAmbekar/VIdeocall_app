@@ -3,6 +3,11 @@ export const signup = async (data) => {
   const res = await axiosInstance.post('/auth/Signup', data);
   return res.data;
 };
+
+export const login = async (data) => {
+  const res = await axiosInstance.post('/auth/Login', data);
+  return res.data;
+}
 export const getAuthUser = async () => {
   try {
     const res = await axiosInstance.get('/auth/Protected');
