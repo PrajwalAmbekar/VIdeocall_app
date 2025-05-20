@@ -1,5 +1,5 @@
 import React from 'react'
-import { Navigate, Route, Router, Routes } from 'react-router';
+import { Navigate, Route, Routes } from 'react-router';
 import HomePage from './pages/HomePage.jsx';
 import OnboardingPage from './pages/OnboardingPage.jsx';
 import CallPage from './pages/CallPage.jsx';
@@ -26,7 +26,7 @@ const App = () => {
   }
 
   return (
-    <div data-theme="retro" className='h-screen' >
+    <div data-theme="night" className='h-screen' >
 
       <Routes>
         <Route path="/" element={isAuthenticated && onBoarded ? <HomePage /> : !isAuthenticated ? <LoginPage /> : <Navigate to="/onboarding" />}  />
@@ -35,7 +35,15 @@ const App = () => {
         <Route path="/notification" element={isAuthenticated ? <NotificationPage /> : <Navigate to="/login" />} />
         <Route path="/call" element={isAuthenticated ? <CallPage /> : <Navigate to="/login" />} />
         <Route path="/chat" element={isAuthenticated ? <ChatPage /> : <Navigate to="/login" />} />
-        <Route path="/onboarding" element={isAuthenticated ? <OnboardingPage /> : <Navigate to="/login" />} />
+        <Route path="/onboarding" element={ isAuthenticated ? (
+              !isOnboarded ? (
+                <OnboardingPage />
+              ) : (
+                <Navigate to="/" />
+              )
+            ) : (
+              <Navigate to="/login" />
+            )} />
         <Route path="/Logout" element={isAuthenticated ? <LogoutPage /> : <Navigate to="/login" />} />
       </Routes>
       <Toaster />

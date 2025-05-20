@@ -32,13 +32,13 @@ export const signup = async (req, res) => {
       return res.status(400).json({ message: 'Password must be at least 6 characters long' });
     };
     const idx = Math.floor(Math.random() * 100) + 1;
-    const ranndomAvatar = `https://api.dicebear.com/5.x/avataaars/svg?seed=${idx}`;
-    console.log('Random avatar URL:', ranndomAvatar);
+    const randomAvatar = `https://api.dicebear.com/5.x/avataaars/svg?seed=${idx}`;
+    console.log('Random avatar URL:', randomAvatar);
 
     const newUser = new User({
       email,
       password,
-      profilePic: ranndomAvatar,
+      profilePic: randomAvatar,
       username
     });
     await newUser.save();
