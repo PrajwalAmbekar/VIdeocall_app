@@ -8,6 +8,10 @@ export const login = async (data) => {
   const res = await axiosInstance.post('/auth/Login', data);
   return res.data;
 }
+export const logout = async () => { 
+  const res = await axiosInstance.post('/auth/Logout');
+  return res.data;
+}    
 export const getAuthUser = async () => {
   try {
     const res = await axiosInstance.get('/auth/Protected');
