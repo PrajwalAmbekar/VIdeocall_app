@@ -1,33 +1,32 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import React from 'react'
-import { login } from '../utils/apis.js';
-import { ShipWheelIcon } from 'lucide-react';
-import { Link } from 'react-router';
+import { useState } from "react";
+import { ShipWheelIcon } from "lucide-react";
+import { Link } from "react-router";
+import useLogin from "../hooks/useLogin";
 
 const LoginPage = () => {
-
-  const [loginData, setLoginData] = React.useState({
-    email: '',
-    password: '',
+  const [loginData, setLoginData] = useState({
+    email: "",
+    password: "",
   });
 
-  const queryClient = useQueryClient();
-  const { mutate: loginMutation, isPending, error } = useMutation({
-    mutationFn: login,
-    onSuccess: () => {
-      toast.success('Login successful');
-      queryClient.invalidateQueries(['authUser']);
-    },
-    onError: (error) => {
-      toast.error(error.response.data.message);
-    },
-  });
+  // This is how we did it at first, without using our custom hook
+  // const queryClient = useQueryClient();
+  // const {
+  //   mutate: loginMutation,
+  //   isPending,
+  //   error,
+  // } = useMutation({
+  //   mutationFn: login,
+  //   onSuccess: () => queryClient.invalidateQueries({ queryKey: ["authUser"] }),
+  // });
+
+  // This is how we did it using our custom hook - optimized version
+  const { isPending, error, loginMutation } = useLogin();
+
   const handleLogin = (e) => {
     e.preventDefault();
     loginMutation(loginData);
-  }
-
-
+  };
 
   return (
     <div
@@ -45,7 +44,13 @@ const LoginPage = () => {
             </span>
           </div>
 
-          
+          {/* ERROR MESSAGE DISPLAY */}
+          {error && (
+            <div className="alert alert-error mb-4">
+              <span>{error.response?.data?.message || "Something went wrong. Please try again."}</span>
+            </div>
+          )}
+
 
           <div className="w-full">
             <form onSubmit={handleLogin}>
@@ -98,11 +103,11 @@ const LoginPage = () => {
                   </button>
 
                   <div className="text-center mt-4">
-                    <p className="text-sm ">
-                      Don't have an account?{" "}<Link to="/signup" className="text-primary hover:underline opacity-70">
+                    <p className="text-sm">
+                      Don't have an account?{" "}
+                      <Link to="/signup" className="text-primary hover:underline">
                         Create one
                       </Link>
-                      
                     </p>
                   </div>
                 </div>
@@ -116,7 +121,7 @@ const LoginPage = () => {
           <div className="max-w-md p-8">
             {/* Illustration */}
             <div className="relative aspect-square max-w-sm mx-auto">
-              <img src="../../public/Video call-bro.svg" alt="Language connection illustration" className="w-full h-full" />
+              <img src="/i.png" alt="Language connection illustration" className="w-full h-full" />
             </div>
 
             <div className="text-center space-y-3 mt-6">
@@ -131,5 +136,4 @@ const LoginPage = () => {
     </div>
   );
 };
-
 export default LoginPage;
